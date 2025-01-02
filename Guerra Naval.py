@@ -1,3 +1,5 @@
+import random
+
 class Equipo:
     def __init__(self, name, size, orientacion, row, col):
         self.orientacion = orientacion
@@ -83,24 +85,32 @@ class Jugador:
     def cuenta_equipos_activos(self):
         return len(self.equipos_activos)
 
-
 def configurar_tablero(jugador, mapa, equipos):
     print(f"* Configurando el tablero para {jugador.name} *")
     mapa.imprimir_grilla()
     for equipo_data in equipos:
         while True:
             try:
-                fila = int(input(f"Fila para {equipo_data['name']}: "))
+                if jugador.name=="(Auto) - Machine of War":
+                    fila=random.randint(0, mapa.size-1)
+                else:
+                    fila = int(input(f"Fila para {equipo_data['name']}: "))
                 if fila < 0 or fila >= mapa.size:
                     print(f"Fila fuera de rango. Debe estar entre 0 y {mapa.size - 1}.")
                     continue
 
-                columna = int(input(f"Columna para {equipo_data['name']}: "))
+                if jugador.name=="(Auto) - Machine of War":
+                    columna=random.randint(0, mapa.size-1)
+                else:
+                    columna = int(input(f"Columna para {equipo_data['name']}: "))
                 if columna < 0 or columna >= mapa.size:
                     print(f"Columna fuera de rango. Debe estar entre 0 y {mapa.size - 1}.")
                     continue
 
-                orientacion = input("Orientación (H o V): ").upper()
+                if jugador.name=="(Auto) - Machine of War":
+                    orientacion=random.choice(["H","V"])
+                else:
+                    orientacion = input("Orientación (H o V): ").upper()
                 if orientacion not in ["H", "V"]:
                     print("Orientación inválida. Ingrese 'H' para horizontal o 'V' para vertical.")
                     continue
@@ -122,12 +132,17 @@ def fase_ataque(atacante, defensor, mapa_ataque, mapa_defensor):
     mapa_ataque.imprimir_grilla()
     while True:
         try:
-            fila = int(input("Ingrese la fila de ataque: "))
+            if atacante.name == "(Auto) - Machine of War":
+                fila = random.randint(0, mapa_ataque.size-1)
+            else:    
+                fila = int(input("Ingrese la fila de ataque: "))
             if fila < 0 or fila >= mapa_defensor.size:
                 print(f"Fila fuera de rango. Debe estar entre 0 y {mapa_defensor.size - 1}.")
                 continue
-
-            columna = int(input("Ingrese la columna de ataque: "))
+            if atacante.name=="(Auto) - Machine of War":
+                columna = random.randint(0, mapa_ataque.size-1)
+            else: 
+                columna = int(input("Ingrese la columna de ataque: "))
             if columna < 0 or columna >= mapa_defensor.size:
                 print(f"Columna fuera de rango. Debe estar entre 0 y {mapa_defensor.size - 1}.")
                 continue
@@ -160,8 +175,20 @@ size = int(input("Ingrese el tamaño de la grilla (>= 7): "))
 while size < 7:
     size = int(input("Tamaño inválido. Ingrese un tamaño de grilla mayor o igual a 7: "))
 
-player_1 = Jugador(input("Nombre del jugador 1: "))
-player_2 = Jugador(input("Nombre del jugador 2: "))
+while True:
+    try:
+        numero_jugadores=input("Elije => A - 1 Jugador | B - 2 Jugadores : ")
+        if numero_jugadores.upper() in ["A", "B"]:
+            break
+    except ValueError:
+        print("Ingresar un valor válido")
+
+if numero_jugadores=="A":
+    player_1 = Jugador(input("Nombre del jugador 1: "))
+    player_2 = Jugador("(Auto) - Machine of War")
+else:
+    player_1 = Jugador(input("Nombre del jugador 1: "))
+    player_2 = Jugador(input("Nombre del jugador 2: "))
 
 mapa_player_1 = PosicionesPropias(size)
 mapa_player_2 = PosicionesPropias(size)
