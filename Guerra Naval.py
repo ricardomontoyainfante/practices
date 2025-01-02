@@ -183,11 +183,10 @@ while True:
     except ValueError:
         print("Ingresar un valor válido")
 
+player_1 = Jugador(input("Nombre del jugador 1: "))
 if numero_jugadores=="A":
-    player_1 = Jugador(input("Nombre del jugador 1: "))
     player_2 = Jugador("(Auto) - Machine of War")
 else:
-    player_1 = Jugador(input("Nombre del jugador 1: "))
     player_2 = Jugador(input("Nombre del jugador 2: "))
 
 mapa_player_1 = PosicionesPropias(size)
